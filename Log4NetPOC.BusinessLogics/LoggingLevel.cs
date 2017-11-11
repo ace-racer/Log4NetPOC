@@ -15,6 +15,11 @@
         /// <summary>
         /// The warn
         /// </summary>
-        Warn
+        Warn,
+
+        /// <summary>
+        /// The exception
+        /// </summary>
+        Exception
     }
 }

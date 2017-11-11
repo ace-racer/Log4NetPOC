@@ -11,11 +11,13 @@ namespace Log4NetPOC
     {
         static void Main(string[] args)
         {
-            LoggingUtility.Log("Entering", LoggingLevel.Info);
+            LoggingUtility.Log("Entering", null, LoggingLevel.Info);
 
-            LoggingUtility.Log("Doing", LoggingLevel.Warn);
+            LoggingUtility.Log("Doing", null, LoggingLevel.Warn);
 
-            LoggingUtility.Log("Leaving", LoggingLevel.Debug);
+            LoggingUtility.Log("Leaving", null, LoggingLevel.Debug);
+
+            LoggingUtility.Log("Exception", new DivideByZeroException("Divinded by 0"));
 
             Console.ReadKey();
         }

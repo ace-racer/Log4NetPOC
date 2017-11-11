@@ -2,7 +2,6 @@
 using log4net.Config;
 using System;
 
-[assembly: log4net.Config.XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace Log4NetPOC.BusinessLogics
 {
     
@@ -23,7 +22,7 @@ namespace Log4NetPOC.BusinessLogics
         /// </summary>
         /// <param name="messageToLog">The message to log.</param>
         /// <param name="logLevel">The log level.</param>
-        public static void Log(string messageToLog, LoggingLevel logLevel = LoggingLevel.Info)
+        public static void Log(string messageToLog, Exception ex = null, LoggingLevel logLevel = LoggingLevel.Info)
         {
             if (!string.IsNullOrWhiteSpace(messageToLog))
             {
@@ -31,10 +30,13 @@ namespace Log4NetPOC.BusinessLogics
                 {
                     if (logger == null)
                     {
-                        logger = LogManager.GetLogger(applicationName);
-                        
-                        // Set up a simple configuration that logs on the console.
-                        BasicConfigurator.Configure();
+                        log4net.Config.XmlConfigurator.Configure();
+                        logger = LogManager.GetLogger(applicationName);                                            
+                    }
+
+                    if(ex != null)
+                    {
+                        logLevel = LoggingLevel.Exception;
                     }
 
                     switch (logLevel)
@@ -48,6 +50,10 @@ namespace Log4NetPOC.BusinessLogics
                         case LoggingLevel.Warn:
                             logger.Warn(messageToLog);
                             break;
+                        case LoggingLevel.Exception:
+                            var completeMessageForException = messageToLog + " " + ex.Message;
+                            logger.Error(completeMessageForException);
+                            break;
                         default:
                             logger.Info(messageToLog);
                             break;
@@ -58,6 +64,6 @@ namespace Log4NetPOC.BusinessLogics
                     // An exception during logging, Yikes!
                 }
             }
-        }
+        }     
     }
 }
